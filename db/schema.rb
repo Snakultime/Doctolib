@@ -10,30 +10,55 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_25_110214) do
+ActiveRecord::Schema.define(version: 2018_10_25_163738) do
 
-  create_table "appoitments", force: :cascade do |t|
+  create_table "appointments", force: :cascade do |t|
     t.datetime "date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "patient_id"
     t.integer "doctor_id"
-    t.index ["doctor_id"], name: "index_appoitments_on_doctor_id"
-    t.index ["patient_id"], name: "index_appoitments_on_patient_id"
+    t.integer "patient_id"
+    t.integer "city_id"
+    t.index ["city_id"], name: "index_appointments_on_city_id"
+    t.index ["doctor_id"], name: "index_appointments_on_doctor_id"
+    t.index ["patient_id"], name: "index_appointments_on_patient_id"
   end
 
-  create_table "doctors", force: :cascade do |t|
-    t.string "first_name"
-    t.string "last_name"
-    t.string "specialty"
+  create_table "cities", force: :cascade do |t|
+    t.string "name"
     t.integer "postal_code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
+  create_table "doctors", force: :cascade do |t|
+    t.string "first_name"
+    t.string "last_name"
+    t.integer "postal_code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "city_id"
+    t.index ["city_id"], name: "index_doctors_on_city_id"
+  end
+
+  create_table "doctors_specialities", id: false, force: :cascade do |t|
+    t.integer "doctor_id", null: false
+    t.integer "speciality_id", null: false
+    t.index ["doctor_id", "speciality_id"], name: "index_doctors_specialities_on_doctor_id_and_speciality_id"
+    t.index ["speciality_id", "doctor_id"], name: "index_doctors_specialities_on_speciality_id_and_doctor_id"
+  end
+
   create_table "patients", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "city_id"
+    t.index ["city_id"], name: "index_patients_on_city_id"
+  end
+
+  create_table "specialities", force: :cascade do |t|
+    t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
